@@ -23,23 +23,18 @@
 
 open Base
 
-let char_to_digit c = (Char.to_int c) - (Char.to_int '0')
+let char_to_digit c =
+    if Char.is_digit c
+    then Some ((Char.to_int c) - (Char.to_int '0'))
+    else None
 
 let calibration_value s =
-    let digits =
-        String.to_list s
-        |> List.filter_map ~f:(fun c ->
-                if Char.is_digit c
-                then Some (char_to_digit c)
-                else None)
-    in
-    let tens_digit = List.hd_exn digits in
-    let ones_digit = List.last_exn digits in
-    ones_digit + 10*tens_digit
+    let digits = String.to_list s |> List.filter_map ~f:char_to_digit in
+    (List.last_exn digits) + 10 * (List.hd_exn digits)
 
 let () =
     In_channel.input_lines In_channel.stdin
     |> List.map ~f:calibration_value
     |> List.reduce_exn ~f:(+)
-    |> Stdlib.print_int;
-    Stdlib.print_newline ()
+    |> Stdlib.print_int
+    |> Stdlib.print_newline
