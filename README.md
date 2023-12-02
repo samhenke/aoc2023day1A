@@ -1,1 +1,2 @@
-# aoc2023day1A
+# Advent of Code 2023
+## Day 1 — Part A
