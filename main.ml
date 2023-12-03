@@ -33,8 +33,9 @@ let calibration_value s =
     (List.last_exn digits) + 10 * (List.hd_exn digits)
 
 let () =
-    In_channel.input_lines In_channel.stdin
-    |> List.map ~f:calibration_value
-    |> List.reduce_exn ~f:(+)
+    In_channel.fold_lines
+        (fun acc line -> acc + (calibration_value line))
+        0
+        In_channel.stdin
     |> Stdlib.print_int
     |> Stdlib.print_newline
